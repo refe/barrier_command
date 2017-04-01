@@ -1,0 +1,99 @@
+/* this library is writing by  Cristian Steib.
+ *      steibkhriz@gmail.com
+ *   https://github.com/cristiansteib/Sim800l
+ *
+ * Modul bariera v1.1 - cu filtrare numere de telefon
+ *     
+ *    PINOUT: 
+ *        _____________________________
+ *       |  ARDUINO UNO >>>   SIM800L  |
+ *        -----------------------------
+ *            GND      >>>   GND
+ *        RX  10       >>>   TX    
+ *        TX  11       >>>   RX
+ *       RESET 2       >>>   RST 
+ *                 
+ *   POWER SOURCE 4.2V >>> VCC
+ *
+ *    Created on: April 20, 2016
+ *        Author: Cristian Steib
+ *        
+ *
+*/
+
+#include <Sim800l.h>
+#include <SoftwareSerial.h> //is necesary for the library!! 
+Sim800l Sim800l;  //to declare the library
+
+
+
+String textSms,numberSms;
+uint8_t index1;
+uint8_t LED2=13; // use what you need 
+bool error;
+
+
+
+void setup(){
+ 
+pinMode(LED2,OUTPUT); 
+digitalWrite(LED2,LOW);
+
+    Serial.begin(9600); // only for debug the results . 
+    Sim800l.begin(); // initializate the library. 
+    Sim800l.reset();  //momentan nu este cazul
+    //don't forget to catch the return of the function delAllSms! 
+    error=Sim800l.delAllSms(); //clean memory of sms;
+    Serial.println("MODULUL GSM PORNIT - ASTEAPTA COMANDA");
+    
+}
+
+void loop(){
+    textSms=Sim800l.readSms(1); //read the first sms
+    
+    if (textSms.indexOf("OK")!=-1) //first we need to know if the messege is correct. NOT an ERROR
+        {           
+        if (textSms.length() > 0)  // optional you can avoid SMS empty. setat cu orice 
+            {
+                
+                numberSms=Sim800l.getNumberSms(1);  // Here you have the number
+                //for debuging
+                Serial.println(numberSms); 
+                textSms.toUpperCase();  // set all char to mayus ;)
+               // Serial.println(textSms);
+                    Serial.println("COMAND RIDICAREA BARIEREI");
+                    digitalWrite(LED2,1);
+                    delay(500); //setez cat timp sa fie contactul pus
+                    digitalWrite(LED2,0);
+
+//filtrez numerele de telefon care au voie sa deschida bariera
+
+                    
+                if (numberSms.indexOf("+407xxxxxxxx")!=-1){
+                    Serial.println("COMAND RIDICAREA BARIEREI");
+                    digitalWrite(LED2,1);
+                    delay(500); //setez cat timp sa fie contactul pus
+                    digitalWrite(LED2,0);
+
+                }
+                else if (numberSms.indexOf("+407xxxxxxxx")!=-1){
+                    Serial.println("COMAND RIDICAREA BARIEREI");
+                    digitalWrite(LED2,1);
+                    delay(500); //setez cat timp sa fie contactul pus
+                    digitalWrite(LED2,0);
+
+                }
+                else{
+                    Serial.println("NUMARUL DE TELEFON NU ARE ACCES");
+                }
+
+
+            Sim800l.delAllSms(); //do only if the message is not empty,in other case is not necesary
+             //delete all sms..so when receive a new sms always will be in first position
+            } 
+
+
+
+        }
+    }
+ 
