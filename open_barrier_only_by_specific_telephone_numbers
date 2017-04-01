@@ -58,13 +58,13 @@ void loop(){
                 
                 numberSms=Sim800l.getNumberSms(1);  // Here you have the number
                 //for debuging
-                Serial.println(numberSms); 
+                // Serial.println(numberSms); 
                 textSms.toUpperCase();  // set all char to mayus ;)
                // Serial.println(textSms);
-                    Serial.println("COMAND RIDICAREA BARIEREI");
-                    digitalWrite(LED2,1);
-                    delay(500); //setez cat timp sa fie contactul pus
-                    digitalWrite(LED2,0);
+               //     Serial.println("COMAND RIDICAREA BARIEREI");
+               //     digitalWrite(LED2,1);
+               //     delay(500); //setez cat timp sa fie contactul pus
+               //     digitalWrite(LED2,0);
 
 //filtrez numerele de telefon care au voie sa deschida bariera
 
